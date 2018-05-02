@@ -1,7 +1,7 @@
 """
 Functions for TURNING the robot LEFT and RIGHT.
-Authors: David Fisher, David Mutchler and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher, David Mutchler and Raymond Becerra.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # TODO: 2. Implment turn_left_seconds, then the relevant part of the test function.
 #          Test and correct as needed.
@@ -27,6 +27,7 @@ def test_turn_left_turn_right():
       3. Same as #2, but runs turn_left_by_encoders.
       4. Same as #1, 2, 3, but tests the turn_right functions.
     """
+    turn_left_seconds(15,40,'brake')
 
 
 def turn_left_seconds(seconds, speed, stop_action):
@@ -35,6 +36,13 @@ def turn_left_seconds(seconds, speed, stop_action):
     where speed is between -100 (full speed turn_right) and 100 (full speed turn_left).
     Uses the given stop_action.
     """
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
+    assert right_motor.connected
+
+    right_motor.run_forever(speed_sp = (speed*8), stop_action = stop_action)
+    time.sleep(seconds)
+    right_motor.stop()
+
 
 
 def turn_left_by_time(degrees, speed, stop_action):
@@ -47,6 +55,12 @@ def turn_left_by_time(degrees, speed, stop_action):
       2. Sleep for the computed number of seconds.
       3. Stop moving.
     """
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    assert right_motor.connected
+
+    right_motor.run_forever(speed_sp=(speed * 8), stop_action=stop_action)
+    time.sleep((degrees/speed)/(9/10))
+    right_motor.stop()
 
 
 def turn_left_by_encoders(degrees, speed, stop_action):
@@ -57,6 +71,11 @@ def turn_left_by_encoders(degrees, speed, stop_action):
       1. Compute the number of degrees the wheels should turn to achieve the desired distance.
       2. Move until the computed number of degrees is reached.
     """
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    assert right_motor.connected
+
+    right_motor.run_to_rel_pos(position_sp=(degrees * 8), speed_sp=(speed * 8), stop_action=stop_action)
+    right_motor.wait_while('running')
 
 
 def turn_right_seconds(seconds, speed, stop_action=):

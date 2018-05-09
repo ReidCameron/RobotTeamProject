@@ -49,6 +49,7 @@ def main():
     robot = robo.Snatch3r()
 
     while True:
+        print("----Test robot.forward----")
         speed_deg_per_second = float(input("Speed (-100 to 100): "))
         if speed_deg_per_second == 0:
             break
@@ -58,6 +59,15 @@ def main():
 
         robot.forward(inches_target, speed_deg_per_second)
         ev3.Sound.beep().wait()  # Fun little beep
+        print("----Test robot.backward----")
+        speed_deg_per_second = float(input("Speed (-100 to 100): "))
+        if speed_deg_per_second == 0:
+            break
+        inches_target = float(input("Distance (inches): "))
+        if inches_target == 0:
+            break
+
+        robot.backward(inches_target, speed_deg_per_second)
 
     print("Goodbye!")
     ev3.Sound.speak("Goodbye").wait()

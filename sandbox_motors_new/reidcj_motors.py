@@ -35,12 +35,10 @@ def test_forward_backward():
     assert left_motor.connected
     assert right_motor.connected
 
-    time_s = 1
-    while time_s != 0:
-        time_s = int(input("Enter a time for the robot to travel: "))
-        speed = int(input("Enter a speed for the motors (0 to 900 dps): "))
-        stop_action = input("Enter a break action: ")
-        forward_seconds(time_s,speed,stop_action)
+    seconds = input('Enter a time(in seconds) to drive: ')
+    speed = input('Enter a speed for the motors: ')
+    stop_action = 'brake'
+    forward_seconds(seconds, speed, stop_action)
 
 
 def forward_seconds(seconds, speed, stop_action):
@@ -57,10 +55,10 @@ def forward_seconds(seconds, speed, stop_action):
     assert left_motor.connected
     assert right_motor.connected
 
-    left_motor.run_forever(speed_sp=speed * 8)
-    right_motor.run_forever(speed_sp=speed * 8)
+    left_motor.run_forever(speed_sp=speed)
+    right_motor.run_forever(speed_sp=speed)
     time.sleep(seconds)
-    left_motor.stop(stop_action=stop_action)
+    left_motor.stop()
     right_motor.stop(stop_action=stop_action)
 
 

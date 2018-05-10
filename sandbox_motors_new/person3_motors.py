@@ -55,7 +55,7 @@ def turn_left_by_time(degrees, speed, stop_action):
       2. Sleep for the computed number of seconds.
       3. Stop moving.
     """
-    right_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
     assert right_motor.connected
 
     right_motor.run_forever(speed_sp=(speed * 8), stop_action=stop_action)

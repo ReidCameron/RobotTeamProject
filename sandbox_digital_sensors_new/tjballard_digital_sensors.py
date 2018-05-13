@@ -121,7 +121,7 @@ def print_state_of_left_button_on_brick(n, seconds_per_print):
     # -------------------------------------------------------------------------
     button = ev3.Button()
     for k in range(n):
-        print(button.left.state)
+        print(button.left)
         time.sleep = seconds_per_print
 
 def run_test_wait_for_press_on_brick_button():
@@ -179,7 +179,7 @@ def wait_for_up_button_press():
        2. Sleeps for a small amount (say, 0.05 seconds).
     """
     # -------------------------------------------------------------------------
-    # TODO: 4.  Implement and test this function.
+    # DONE: 4.  Implement and test this function.
     #           Tests have been written for you (above).
     # -------------------------------------------------------------------------
     button = ev3.Button()

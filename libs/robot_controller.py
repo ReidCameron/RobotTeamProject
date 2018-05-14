@@ -40,11 +40,21 @@ class Snatch3r(object):
     def backward(self, inches, speed, stop_action = 'brake'):
         k = 360 / 4.2
         degrees = (k*inches)
-        self.left_motor.run_to_rel_pos(speed_sp = speed * 8,
-                                       position_sp = -degrees,
+        self.left_motor.run_to_rel_pos(speed_sp = speed * -8,
+                                       position_sp = -1*degrees,
                                        stop_action = stop_action)
-        self.right_motor.run_to_rel_pos(speed_sp=speed * 8,
-                                       position_sp=-degrees,
+        self.right_motor.run_to_rel_pos(speed_sp=speed * -8,
+                                       position_sp=-1*degrees,
                                        stop_action=stop_action)
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
+    def spin_left(self,degrees, speed, brake_action = 'brake'):
+        # degrees = inches * (360 / 13)  # 5 inches for 1 wheel rotation
+        k=0.8
+        time_needed = (degrees / speed) * k
+        print(time_needed)
+        self.left_motor.run_forever(speed_sp=-speed * 8)
+        self. right_motor.run_forever(speed_sp=speed * 8)
+        time.sleep(time_needed)
+        self.left_motor.stop(stop_action=brake_action)
+        self.right_motor.stop(stop_action=brake_action)

@@ -76,6 +76,8 @@ def main():
     stop_button = ttk.Button(main_frame, text="Stop")
     stop_button.grid(row=3, column=1)
     # stop_button and '<space>' key (note, does not need left_speed_entry, right_speed_entry)
+    stop_button['command'] = lambda: stop(mqtt_client)
+    root.bind('<space>', lambda event: stop(mqtt_client))
 
     right_button = ttk.Button(main_frame, text="Right")
     right_button.grid(row=3, column=2)
@@ -87,7 +89,7 @@ def main():
     back_button.grid(row=4, column=1)
     # back_button and '<Down>' key
     back_button['command'] = lambda: send_backward(mqtt_client, left_speed_entry, right_speed_entry)
-    root.bind('<Up>', lambda event: send_backward(mqtt_client, left_speed_entry, right_speed_entry))
+    root.bind('<Down>', lambda event: send_backward(mqtt_client, left_speed_entry, right_speed_entry))
 
     up_button = ttk.Button(main_frame, text="Up")
     up_button.grid(row=5, column=0)
@@ -135,23 +137,26 @@ def send_down(mqtt_client):
 
 def send_forward(mqtt_client, left_speed_entry, right_speed_entry):
     print("forward")
-    mqtt_client.send_message("forward", [int(right_speed_entry.get()), int(left_speed_entry.get())])
+    mqtt_client.send_message("move", [int(right_speed_entry.get()), int(left_speed_entry.get())])
 
 
 def send_backward(mqtt_client, left_speed_entry, right_speed_entry):
     print("backward")
-    mqtt_client.send_message("backward", [int(right_speed_entry.get()), int(left_speed_entry.get())])
+    mqtt_client.send_message("move", [-int(right_speed_entry.get()), -int(left_speed_entry.get())])
 
 
 def send_left(mqtt_client, left_speed_entry, right_speed_entry):
     print("left")
-    mqtt_client.send_message("left", [-int(right_speed_entry.get()), int(left_speed_entry.get())])
+    mqtt_client.send_message("spin", [int(right_speed_entry.get()), -int(left_speed_entry.get())])
 
 
 def send_right(mqtt_client, left_speed_entry, right_speed_entry):
     print("right")
-    mqtt_client.send_message("right", [int(right_speed_entry.get()), -int(left_speed_entry.get())])
+    mqtt_client.send_message("spin", [-int(right_speed_entry.get()), int(left_speed_entry.get())])
 
+def stop(mqtt_client):
+    print("stop")
+    mqtt_client.send_message("stop")
 
 # Quit and Exit button callbacks
 def quit_program(mqtt_client, shutdown_ev3):

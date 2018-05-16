@@ -25,10 +25,15 @@ class Snatch3r(object):
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
         self.close = False
+
         assert self.touch_sensor
         assert self.left_motor.connected
         assert self.right_motor.connected
         assert self.arm_motor.connected
+
+        print("Arm is Calibrating.")
+        self.arm_calibration()
+        print("Done:)")
 
     def forward(self, inches, speed, stop_action = 'brake'):
         k = 360 / 4.2
@@ -90,8 +95,6 @@ class Snatch3r(object):
         self.left_motor.stop()
         self.right_motor.stop()
     def arm_up(self):
-        print("Arm is Calibrating.")
-        self.arm_calibration()
         self.arm_motor.run_forever(speed_sp=700)
         while not self.touch_sensor.is_pressed:
             time.sleep(0.01)
@@ -99,19 +102,19 @@ class Snatch3r(object):
         ev3.Sound.beep().wait()
 
     def arm_down(self):
-        self.arm_motor.run_to_rel_pos(position_sp=14.2*360)
+        self.arm_motor.run_to_rel_pos(position_sp=-14.2*360)
         self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
     def arm_calibration(self):
-        self.arm_motor.run_forever(speed_sp=300)
+        self.arm_motor.run_forever(speed_sp=700)
         while not self.touch_sensor.is_pressed:
             time.sleep(0.01)
         self.arm_motor.stop(stop_action="coast")
-
+        print("Benchmark 1")
         arm_revolutions_for_full_range = 14.2*360
         self.arm_motor.run_to_rel_pos(position_sp=-arm_revolutions_for_full_range)
         self.arm_motor.wait_while('running')
-
+        print("Benchmark 2")
         self.arm_motor.position = 0  # Calibrate the down position as 0 (this line is correct as is).
     def shutdown(self):
         self.close = True

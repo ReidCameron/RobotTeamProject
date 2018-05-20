@@ -23,6 +23,7 @@ class Snatch3r(object):
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
+        self.beacon_seeker = ev3.BeaconSeeker(Channel=1)
         self.touch_sensor = ev3.TouchSensor()
         self.close = False
 

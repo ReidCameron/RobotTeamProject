@@ -38,6 +38,8 @@ class Snatch3r(object):
         self.arm_calibration()
         print("Done:)")
 
+        self.color_sensor
+
     def forward(self, inches, speed, stop_action = 'brake'):
         k = 360 / 4.2
         degrees = (k*inches)
@@ -80,10 +82,10 @@ class Snatch3r(object):
         degrees_needed = degrees*k
         print(degrees_needed)
 
-        self.left_motor.run_to_rel_pos(speed_sp=-speed * 8,
+        self.left_motor.run_to_rel_pos(speed_sp=speed * 8,
                                        position_sp = degrees_needed)
-        self.right_motor.run_to_rel_pos(speed_sp=speed * 8,
-                                       position_sp=degrees_needed)
+        self.right_motor.run_to_rel_pos(speed_sp=-speed * 8,
+                                       position_sp=-degrees_needed)
         self.left_motor.wait_while("running")
         self.right_motor.wait_while("running")
     def spin(self,right_speed, left_speed):

@@ -67,14 +67,35 @@ class Retriever(object):
 
     def __init__(self):
         self.color_sensor = ev3.ColorSensor()
+        self.ir_sensor = ev3.InfraredSensor()
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
+        self.touch = ev3.TouchSensor()
 
 
         assert self.left_motor.connected
         assert self.right_motor.connected
+        assert self.ir_sensor
         assert self.arm_motor.connected
+        assert self.touch
+
+    def arm_calibration(self):
+        self.arm_motor.run_forever(speed_sp=500)
+        print("Benchmark 0")
+        while True:
+            if self.touch.is_pressed == 1:
+                break
+            print(self.touch.is_pressed)
+            time.sleep(0.01)
+        self.arm_motor.stop(stop_action="coast")
+        print("Benchmark 1:  Reached the top")
+        # Down
+        arm_revolutions_for_full_range = 14.2*360
+        self.arm_motor.run_to_rel_pos(position_sp=-arm_revolutions_for_full_range)
+        self.arm_motor.wait_while('running')
+        print("Benchmark 2: Reached the bottom")
+        self.arm_motor.position = 0  # Calibrate the down position as 0 (this line is correct as is).
 
     def color_scan(self):
         self.right_motor.run_forever(speed_sp = 400)
@@ -85,13 +106,34 @@ class Retriever(object):
             if self.color_sensor.color == 5:
                 self.right_motor.run_to_rel_pos(position_sp = -90*k, speed_sp = -400)
                 self.left_motor.run_to_rel_pos(position_sp = 90*k, speed_sp = 400)
+                print('1')
                 self.left_motor.wait_while("running")
                 self.right_motor.wait_while("running")
-                # self.right_motor.stop()
-                # self.left_motor.stop()
+                print('2')
+                time.sleep(1)
                 break
-            # self.right_motor.run_forever(speed_sp = 400)
-            # self.left_motor.run_forever(speed_sp = 400)
+            # if self.color_sensor.color == 2:
+            #     self.right_motor.run_to_rel_pos(position_sp=-90 * k, speed_sp=-400)
+            #     self.left_motor.run_to_rel_pos(position_sp=90 * k, speed_sp=400)
+            #     self.left_motor.wait_while("running")
+            #     self.right_motor.wait_while("running")
+            #     break
+        print('3')
+
+    def bottle_snatch(self):
+        self.right_motor.run_forever(speed_sp=400)
+        self.left_motor.run_forever(speed_sp=400)
+
+        while True:
+            print(self.ir_sensor.proximity)
+            if self.ir_sensor.proximity < 10:
+                self.right_motor.stop()
+                self.left_motor.stop()
+                ev3.Sound.beep()
+                ev3.Sound.speak('Found the Bottle')
+                self.arm_motor.run_forever(speed_sp = -500)
+                break
+
 
 
 # ----------------------------------------------------------------------

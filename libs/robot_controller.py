@@ -121,8 +121,6 @@ class Snatch3r(object):
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
             time.sleep(.05)
-        ev3.Sound.beep()
-        ev3.Sound.speak("Person is safe").wait()
 
 
     def arm_calibration(self):

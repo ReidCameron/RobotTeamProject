@@ -22,10 +22,10 @@ class Beacon(object):
         self.robot.spin(-200, 200)
 
     def send_left(self):
-        self.robot.spin(250, -250)
+        self.robot.spin(400, -400)
 
     def finder(self):
-        while self.robot.ir_sensor.proximity > 95:
+        while self.robot.ir_sensor.proximity > 70:
             print('nothing is being detected', self.robot.ir_sensor.proximity)
             self.send_right()
         while self.robot.ir_sensor.proximity > 15:
@@ -35,6 +35,9 @@ class Beacon(object):
         print(self.robot.ir_sensor.proximity)
         self.stop()
         self.robot.blinking_lights()
+        if self.robot.touch_sensor.is_pressed ==1:
+            self.robot.ev3.Sound.beep()
+            self.robot.ev3.Sound.speak("Person is safe").wait()
 
 
 def main():

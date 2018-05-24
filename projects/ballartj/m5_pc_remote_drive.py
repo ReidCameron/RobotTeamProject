@@ -41,11 +41,18 @@ def main():
     root = tkinter.Tk()
     root.title("Search And Rescue")
 
+    style = ttk.Style()
+    style.configure('Style', 'aqua')
+
     main_frame = ttk.Frame(root, padding=5,  relief='raised')
     main_frame.grid()
+    title = ttk.Label(main_frame, text="Search & Rescue Bot")
+    title.grid(row=0, column=0)
+
+    command = ttk.Label(main_frame, text="Find a person who needs help!")
+    command.grid(row=2, column=0)
     # main_frame.configure(background='black')
 
-    style = ttk.Style()
     # style.configure('Style',='black')
 
     # title = ttk.Label(text="Test", style="Style")
@@ -57,11 +64,10 @@ def main():
     # You need to implement the five drive buttons.  One has been writen below to help get you started but is commented
     # out. You will need to change some_callback1 to some better name, then pattern match for other button / key combos.
 
-    finder_button = ttk.Button(main_frame, text="Finder")
+    finder_button = ttk.Button(main_frame, text="FIND")
     finder_button.grid(row=2, column=1)
     finder_button['command'] = lambda: finder(mqtt_client)
     root.bind('<F>', lambda event: finder(mqtt_client))
-
 
     stop_button = ttk.Button(main_frame, text="Stop")
     stop_button.grid(row=2, column=2)

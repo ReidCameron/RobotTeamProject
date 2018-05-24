@@ -109,6 +109,7 @@ class Snatch3r(object):
         self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep().wait()
 
+
     def blinking_lights(self):
         while self.touch_sensor.is_pressed == 0:
             ev3.Sound.play("/home/robot/csse120/assets/sounds/ambulance.wav")
@@ -120,7 +121,8 @@ class Snatch3r(object):
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
             time.sleep(.05)
-        ev3.Sound.speak("Person is safe")
+        ev3.Sound.beep()
+        ev3.Sound.speak("Person is safe").wait()
 
 
     def arm_calibration(self):

@@ -8,27 +8,36 @@ class Beacon(object):
     def __init__(self):
         self.robot = robo.Snatch3r()
 
-    def loop_forver(self):
+    def loop_forever(self):
         while True:
             time.sleep(.05)
 
-    def arm_up(self):
-        self.robot.arm_up()
-
-    def arm_down(self):
-        self.robot.arm_down()
+    def stop(self):
+        self.robot.stop()
 
     def send_forward(self):
-        self.robot.forward(self)
+        self.robot.move(600, 600)
+
+    def send_right(self):
+        self.robot.spin(-200, 200)
+
+    def send_left(self):
+        self.robot.spin(400, -400)
 
     def finder(self):
-        self.send_left()
-        if self.robot.beacon_finder.distance <=10:
-            self.robot.stop()
-            time.sleep(.5)
+        while self.robot.ir_sensor.proximity > 70:
+            print('nothing is being detected', self.robot.ir_sensor.proximity)
+            self.send_right()
+        while self.robot.ir_sensor.proximity > 15:
+            print('Detected', self.robot.ir_sensor.proximity)
+            print(self.robot.ir_sensor.proximity)
             self.send_forward()
-
-
+        print(self.robot.ir_sensor.proximity)
+        self.stop()
+        self.robot.blinking_lights()
+        if self.robot.touch_sensor.is_pressed ==1:
+            self.robot.ev3.Sound.beep()
+            self.robot.ev3.Sound.speak("Person is safe").wait()
 
 
 def main():
@@ -36,5 +45,6 @@ def main():
     mqtt_client = com.MqttClient(remote)
     mqtt_client.connect_to_pc()
     remote.loop_forever()
+
 
 main()

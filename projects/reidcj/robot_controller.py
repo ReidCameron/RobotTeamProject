@@ -24,6 +24,7 @@ class Snatch3r(object):
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.beacon_seeker = ev3.BeaconSeeker(Channel=1)
+        self.ir_sensor = ev3.InfraredSensor()
         self.touch_sensor = ev3.TouchSensor()
         self.close = False
 
@@ -32,9 +33,6 @@ class Snatch3r(object):
         assert self.right_motor.connected
         assert self.arm_motor.connected
 
-        print("Arm is Calibrating.")
-        self.arm_calibration()
-        print("Done:)")
 
     def forward(self, inches, speed, stop_action = 'brake'):
         k = 360 / 4.2

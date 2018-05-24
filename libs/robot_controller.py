@@ -22,7 +22,7 @@ class Snatch3r(object):
     def __init__(self):
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
-        self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
+        # self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
         self.beacon_finder = ev3.BeaconSeeker(channel=1)
         self.ir_sensor = ev3.InfraredSensor()
@@ -30,19 +30,17 @@ class Snatch3r(object):
 
         assert self.touch_sensor
         assert self.beacon_finder
+        assert self.ir_sensor
         assert self.left_motor.connected
         assert self.right_motor.connected
-        assert self.arm_motor.connected
+        # assert self.arm_motor.connected
 
-        print("Arm is Calibrating.")
-        self.arm_calibration()
-        print("Done:)")
 
-        self.color_sensor
+        # self.color_sensor
 
     def forward(self, inches, speed, stop_action = 'brake'):
         k = 360 / 4.2
-        degrees = (k*inches)
+        degrees = (k * inches)
         self.left_motor.run_to_rel_pos(speed_sp = speed * 8,
                                        position_sp = degrees,
                                        stop_action = stop_action)
@@ -66,7 +64,7 @@ class Snatch3r(object):
         self.left_motor.run_forever(speed_sp = speed_left)
         self.right_motor.run_forever(speed_sp= speed_right)
 
-    def spin_left_by_time(self,degrees, speed, brake_action = 'brake'):
+    def spin_left_by_time(self, degrees, speed, brake_action = 'brake'):
         # degrees = inches * (360 / 13)  # 5 inches for 1 wheel rotation
         k=0.8
         time_needed = (degrees / speed) * k
@@ -110,6 +108,20 @@ class Snatch3r(object):
         self.arm_motor.run_to_rel_pos(position_sp=-14.2*360)
         self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep().wait()
+
+    def blinking_lights(self):
+        while self.touch_sensor.is_pressed == 0:
+            ev3.Sound.play("/home/robot/csse120/assets/sounds/ambulance.wav")
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
+            time.sleep(0.05)
+            ev3.Leds.all_off()
+            time.sleep(0.01)
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+            time.sleep(.05)
+        ev3.Sound.speak("Person is safe")
+
 
     def arm_calibration(self):
         self.arm_motor.run_forever(speed_sp=500)
